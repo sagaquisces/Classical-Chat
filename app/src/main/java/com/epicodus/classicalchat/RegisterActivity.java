@@ -60,7 +60,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     startActivity(main_intent);
                     finish();
                 } else {
-                    Toast.makeText(RegisterActivity.this, "You got an error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "You got an error", Toast.LENGTH_LONG).show();
                 }
             }
         });
