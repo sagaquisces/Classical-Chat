@@ -43,10 +43,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View view) {
 
-        String display_name = mDisplayName.getEditText().getText().toString();
-        String email = mEmail.getEditText().getText().toString();
-        String password = mPassword.getEditText().getText().toString();
-        String confirm_password = mConfirmPassword.getEditText().getText().toString();
+        String display_name = mDisplayName.getEditText().getText().toString().trim();
+        String email = mEmail.getEditText().getText().toString().trim();
+        String password = mPassword.getEditText().getText().toString().trim();
+        String confirm_password = mConfirmPassword.getEditText().getText().toString().trim();
+
+        boolean validName = isValidName(display_name);
+        boolean validEmail = isValidEmail(email);
+        boolean validPassword = isValidPassword(password, confirm_password);
+        if (!validEmail || !validName || !validPassword) return;
 
         register_user(display_name, email, password, confirm_password);
     }
@@ -64,5 +69,34 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 }
             }
         });
+    }
+
+    private boolean isValidEmail(String email) {
+        boolean isGoodEmail =
+                (email != null && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches());
+        if (!isGoodEmail) {
+            mEmail.setError("Please enter a valid email address");
+            return false;
+        }
+        return isGoodEmail;
+    }
+
+    private boolean isValidName(String name) {
+        if (name.equals("")) {
+            mDisplayName.setError("Please enter your name");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isValidPassword(String password, String confirmPassword) {
+        if (password.length() < 6) {
+            mPassword.setError("Please create a password containing at least 6 characters");
+            return false;
+        } else if (!password.equals(confirmPassword)) {
+            mPassword.setError("Passwords do not match");
+            return false;
+        }
+        return true;
     }
 }
