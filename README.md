@@ -1,4 +1,4 @@
-# Classical chat
+# Classical Chat
 
 An app that helps classical music lovers connect via meetups and chat.
 
