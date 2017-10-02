@@ -87,6 +87,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     mRegProgress.dismiss();
 
                     Intent main_intent = new Intent (RegisterActivity.this, MainActivity.class);
+                    main_intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(main_intent);
                     finish();
                 } else {

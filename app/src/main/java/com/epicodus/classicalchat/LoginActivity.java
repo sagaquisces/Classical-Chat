@@ -98,6 +98,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     mLoginProgress.dismiss();
 
                     Intent main_intent = new Intent(LoginActivity.this, MainActivity.class);
+                    main_intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(main_intent);
                     finish();
 
