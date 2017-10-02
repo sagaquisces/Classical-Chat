@@ -9,4 +9,6 @@
     <string name="logout">Logout</string>
     <string name="create_new_account">Create New Account</string>
     <string name="login">Login</string>
+    <string name="find_classical_meetups">Find Classical Meetups</string>
+    <string name="find_like_minded_friends">Find Like-minded Friends</string>
 </resources>

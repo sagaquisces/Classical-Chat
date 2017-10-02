@@ -25,6 +25,7 @@
         <activity
             android:name=".LoginActivity"
             android:parentActivityName=".StartActivity" />
+        <activity android:name=".ChatActivity"></activity>
     </application>
 
 </manifest>

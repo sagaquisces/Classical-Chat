@@ -4,18 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context="com.epicodus.classicalchat.MainActivity">
 
     <include layout="@layout/app_bar_layout" android:id="@+id/main_toolbar" />
 
     <TextView
+        android:id="@+id/mainAppNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Main Activity"
+        android:text="This is Classical Chat"
+        android:textColor="@color/colorIcons"
         android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/mainMeetupBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/colorAccent"
+        android:text="@string/find_classical_meetups"
+        android:textColor="@color/colorIcons"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainAppNameTextView"
+        app:layout_constraintVertical_bias="0.102" />
+
+    <Button
+        android:id="@+id/mainChatBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/colorIcons"
+        android:text="@string/find_like_minded_friends"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainMeetupBtn" />
+
+
 
 </android.support.constraint.ConstraintLayout>

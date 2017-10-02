@@ -1,11 +1,16 @@
 package com.epicodus.classicalchat;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -13,8 +18,12 @@ import com.google.firebase.auth.FirebaseUser;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     @Bind(R.id.main_toolbar) Toolbar mToolbar;
+
+    @Bind(R.id.mainAppNameTextView) TextView mAppNameTextView;
+    @Bind(R.id.mainMeetupBtn) Button mMeetupBtn;
+    @Bind(R.id.mainChatBtn) Button mChatBtn;
 
     private FirebaseAuth mAuth;
 
@@ -25,10 +34,16 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        Typeface sansationBoldFont = Typeface.createFromAsset(getAssets(), "fonts/SansationBold.ttf");
+        mAppNameTextView.setTypeface(sansationBoldFont);
+
         mAuth = FirebaseAuth.getInstance();
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Classical Chat");
+
+        mMeetupBtn.setOnClickListener(this);
+        mChatBtn.setOnClickListener(this);
     }
 
     @Override
@@ -65,5 +80,19 @@ public class MainActivity extends AppCompatActivity {
 
         }
         return true;
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view == mMeetupBtn) {
+            Toast.makeText(MainActivity.this, "MeetupActivity coming soon...", Toast.LENGTH_SHORT).show();
+//            Intent main_intent = new Intent(MainActivity.this, MeetupActivity.class);
+//            startActivity(main_intent);
+        }
+
+        if(view == mChatBtn) {
+            Intent main_intent = new Intent(MainActivity.this, ChatActivity.class);
+            startActivity(main_intent);
+        }
     }
 }
