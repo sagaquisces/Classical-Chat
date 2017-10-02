@@ -16,6 +16,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -32,6 +37,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Bind(R.id.regCreateBtn) Button mCreateBtn;
 
     private ProgressDialog mRegProgress;
+    private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
 
     @Override
@@ -78,23 +84,43 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    private void register_user(String display_name, String email, String password, String confirm_password) {
+    private void register_user(final String display_name, String email, String password, String confirm_password) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
+            if(task.isSuccessful()) {
 
-                    mRegProgress.dismiss();
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                String uid = currentUser.getUid();
 
-                    Intent main_intent = new Intent (RegisterActivity.this, MainActivity.class);
-                    main_intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(main_intent);
-                    finish();
-                } else {
+                mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
 
-                    mRegProgress.hide();
-                    Toast.makeText(RegisterActivity.this, "Cannot sign in. Please check the form and try again.", Toast.LENGTH_LONG).show();
-                }
+                HashMap<String, String> userMap = new HashMap<>();
+                userMap.put("name", display_name);
+                userMap.put("status", "Status to be determined.");
+                userMap.put("image", "default");
+                userMap.put("thumb_image", "default");
+
+                mDatabase.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        if(task.isSuccessful()){
+                            mRegProgress.dismiss();
+
+                            Intent main_intent = new Intent (RegisterActivity.this, MainActivity.class);
+                            main_intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(main_intent);
+                            finish();
+                        }
+                    }
+                });
+
+            } else {
+
+                mRegProgress.hide();
+                Toast.makeText(RegisterActivity.this, "Cannot sign in. Please check the form and try again.", Toast.LENGTH_LONG).show();
+            }
             }
         });
     }

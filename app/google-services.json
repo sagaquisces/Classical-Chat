@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "196726968141-j1d0m01d1b0l4n1vpd5firbm4m36nmub.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.epicodus.classicalchat",
+            "certificate_hash": "a02ddcac30b82e866c3702209035d698344ad20e"
+          }
+        },
+        {
           "client_id": "196726968141-o8rcojvarucv22sqm3h946fehpn5dodb.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
