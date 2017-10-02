@@ -49,6 +49,9 @@ public class StatusActivity extends AppCompatActivity implements View.OnClickLis
         getSupportActionBar().setTitle("Account Status");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        String status_value = getIntent().getStringExtra("status_value");
+        mStatus.getEditText().setText(status_value);
+
         mSaveBtn.setOnClickListener(this);
     }
 

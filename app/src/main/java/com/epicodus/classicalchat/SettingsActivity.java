@@ -81,7 +81,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
 
         if (view == mChangeStatusBtn) {
+            String status_value = mStatusTextView.getText().toString();
+
             Intent status_intent = new Intent(SettingsActivity.this, StatusActivity.class);
+            status_intent.putExtra("status_value", status_value);
             startActivity(status_intent);
         }
     }
