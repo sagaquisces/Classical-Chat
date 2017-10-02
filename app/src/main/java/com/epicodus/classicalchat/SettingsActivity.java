@@ -1,5 +1,6 @@
 package com.epicodus.classicalchat;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -80,7 +81,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
 
         if (view == mChangeStatusBtn) {
-            Toast.makeText(this, "Change status code", Toast.LENGTH_SHORT);
+            Intent status_intent = new Intent(SettingsActivity.this, StatusActivity.class);
+            startActivity(status_intent);
         }
     }
 }
