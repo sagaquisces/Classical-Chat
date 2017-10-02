@@ -8,8 +8,8 @@ import android.support.v4.app.FragmentPagerAdapter;
  * Created by Guest on 10/2/17.
  */
 
-class SectionsPagerAdapter extends FragmentPagerAdapter{
-    public SectionsPagerAdapter(FragmentManager fm) {
+class ChatPagerAdapter extends FragmentPagerAdapter{
+    public ChatPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
@@ -37,5 +37,21 @@ class SectionsPagerAdapter extends FragmentPagerAdapter{
     @Override
     public int getCount() {
         return 3;
+    }
+
+    public CharSequence getPageTitle(int position) {
+        switch (position) {
+            case 0:
+                return "REQUESTS";
+
+            case 1:
+                return "CHATS";
+
+            case 2:
+                return "FRIENDS";
+
+            default:
+                return null;
+        }
     }
 }

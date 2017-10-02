@@ -15,7 +15,7 @@ public class ChatActivity extends AppCompatActivity {
     @Bind(R.id.chat_tabPager) ViewPager mViewPager;
     @Bind(R.id.chat_tabs) TabLayout mTabLayout;
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ChatPagerAdapter mChatPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +28,9 @@ public class ChatActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Classical Chat");
 
         //Tabs
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mChatPagerAdapter = new ChatPagerAdapter(getSupportFragmentManager());
 
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setAdapter(mChatPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }
 }
