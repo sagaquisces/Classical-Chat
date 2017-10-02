@@ -79,6 +79,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             sendToStart();
 
         }
+
+        if(item.getItemId() == R.id.mainSettingsBtn) {
+            Intent settings_intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(settings_intent);
+        }
         return true;
     }
 

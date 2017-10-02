@@ -55,7 +55,10 @@
         android:text="Change Image"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toTopOf="@+id/settings_change_status_btn"
-        tools:layout_editor_absoluteX="129dp" />
+        android:layout_marginRight="7dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
         android:id="@+id/settings_change_status_btn"
@@ -66,6 +69,9 @@
         android:textColor="@color/colorIcons"
         android:text="Change Status"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="123dp" />
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
