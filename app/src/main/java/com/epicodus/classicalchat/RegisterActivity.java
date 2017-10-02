@@ -16,11 +16,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -119,7 +123,20 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             } else {
 
                 mRegProgress.hide();
-                Toast.makeText(RegisterActivity.this, "Cannot sign in. Please check the form and try again.", Toast.LENGTH_LONG).show();
+                String error = "";
+                try {
+                    throw task.getException();
+                } catch (FirebaseAuthWeakPasswordException e){
+                    error = "Weak password";
+                } catch (FirebaseAuthInvalidCredentialsException e){
+                    error = "Invalid Email";
+                } catch (FirebaseAuthUserCollisionException e){
+                    error = "Existing account";
+                } catch (Exception e){
+                    error = "Unknown error.";
+                    e.printStackTrace();
+                }
+                Toast.makeText(RegisterActivity.this, error, Toast.LENGTH_LONG).show();
             }
             }
         });
