@@ -6,4 +6,36 @@
     android:layout_height="match_parent"
     tools:context="com.epicodus.classicalchat.ChatActivity">
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/mainChatTabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <include
+            android:id="@+id/chat_toolbar"
+            layout="@layout/app_bar_layout" />
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/chat_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></android.support.design.widget.TabLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/chat_tabPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainChatTabs"></android.support.v4.view.ViewPager>
+
+
 </android.support.constraint.ConstraintLayout>

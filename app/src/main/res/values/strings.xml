@@ -11,4 +11,7 @@
     <string name="login">Login</string>
     <string name="find_classical_meetups">Find Classical Meetups</string>
     <string name="find_like_minded_friends">Find Like-minded Friends</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
