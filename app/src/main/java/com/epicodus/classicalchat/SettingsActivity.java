@@ -80,10 +80,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 mNameTextView.setText(name);
                 mStatusTextView.setText(status);
 
-                Picasso
-                        .with(SettingsActivity.this)
-                        .load(image)
-                        .into(mCircleImageView);
+                if (!image.equals("default")) {
+                    Picasso
+                            .with(SettingsActivity.this)
+                            .load(image)
+                            .into(mCircleImageView);
+                }
             }
 
             @Override
