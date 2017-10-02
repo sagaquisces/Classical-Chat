@@ -28,6 +28,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         mAppNameTextView.setTypeface(sansationBoldFont);
 
         mRegBtn.setOnClickListener(this);
+        mLoginBtn.setOnClickListener(this);
     }
 
     @Override
@@ -35,6 +36,11 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         if(view == mRegBtn) {
             Intent reg_intent = new Intent(StartActivity.this, RegisterActivity.class);
             startActivity(reg_intent);
+        }
+
+        if(view == mLoginBtn) {
+            Intent login_intent = new Intent(StartActivity.this, LoginActivity.class);
+            startActivity(login_intent);
         }
     }
 }
