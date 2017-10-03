@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.epicodus.classicalchat.R;
 import com.epicodus.classicalchat.models.Meetup;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -62,6 +63,7 @@ public class MeetupListAdapter extends RecyclerView.Adapter<MeetupListAdapter.Me
         }
 
         public void bindMeetup(Meetup meetup) {
+            Picasso.with(mContext).load(meetup.getImageUrl()).into(mImageView);
             mNameTextView.setText(meetup.getName());
             mLocationTextView.setText(meetup.getLocation());
             mScoreTextView.setText("Score: " + meetup.getScore());
