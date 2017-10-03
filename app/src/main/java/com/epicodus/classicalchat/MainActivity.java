@@ -84,6 +84,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent settings_intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(settings_intent);
         }
+
+        if(item.getItemId() == R.id.mainAllUsersBtn) {
+            Intent all_users_intent = new Intent(MainActivity.this, UsersActivity.class);
+            startActivity(all_users_intent);
+        }
         return true;
     }
 
@@ -99,5 +104,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent main_intent = new Intent(MainActivity.this, ChatActivity.class);
             startActivity(main_intent);
         }
+
     }
 }
