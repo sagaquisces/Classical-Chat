@@ -95,9 +95,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if(view == mMeetupBtn) {
-            Toast.makeText(MainActivity.this, "MeetupActivity coming soon...", Toast.LENGTH_SHORT).show();
-//            Intent main_intent = new Intent(MainActivity.this, MeetupActivity.class);
-//            startActivity(main_intent);
+            Intent main_intent = new Intent(MainActivity.this, MeetupsActivity.class);
+            startActivity(main_intent);
         }
 
         if(view == mChatBtn) {
