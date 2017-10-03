@@ -1,11 +1,18 @@
-package com.epicodus.classicalchat;
+package com.epicodus.classicalchat.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.epicodus.classicalchat.adapters.MeetupListAdapter;
+import com.epicodus.classicalchat.services.MeetupService;
+import com.epicodus.classicalchat.R;
+import com.epicodus.classicalchat.models.Meetup;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +27,8 @@ public class MeetupsActivity extends AppCompatActivity {
     public static final String TAG = MeetupsActivity.class.getSimpleName();
 
     @Bind(R.id.locationTextView) TextView mLocationTextView;
-    @Bind(R.id.listView) ListView mListView;
+    @Bind(R.id.recyclerView) RecyclerView mRecyclerView;
+    private MeetupListAdapter mAdapter;
 
     public ArrayList<Meetup> mMeetups = new ArrayList<>();
 
@@ -58,24 +66,12 @@ public class MeetupsActivity extends AppCompatActivity {
 
                     @Override
                     public void run() {
-                        String[] meetupNames = new String [mMeetups.size()];
+                        mAdapter = new MeetupListAdapter(getApplicationContext(), mMeetups);
+                        mRecyclerView.setAdapter(mAdapter);
+                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MeetupsActivity.this);
+                        mRecyclerView.setLayoutManager(layoutManager);
+                        mRecyclerView.setHasFixedSize(true);
 
-                        for (int i = 0; i < meetupNames.length; i++) {
-                            meetupNames[i] = mMeetups.get(i).getName();
-                        }
-
-                        ArrayAdapter adapter = new ArrayAdapter(MeetupsActivity.this, android.R.layout.simple_list_item_1, meetupNames);
-                        mListView.setAdapter(adapter);
-
-                        for(Meetup meetup :mMeetups) {
-                            Log.d(TAG, "Score: " + meetup.getScore());
-                            Log.d(TAG, "Name: " + meetup.getName());
-                            Log.d(TAG, "Link: " + meetup.getName());
-                            Log.d(TAG, "Description: " + meetup.getName());
-                            Log.d(TAG, "Location: " + meetup.getLocation());
-                            Log.d(TAG, "Organizer: " + meetup.getOrganizer());
-                            Log.d(TAG, "Image: " + meetup.getImageUrl());
-                        }
                     }
                 });
             }

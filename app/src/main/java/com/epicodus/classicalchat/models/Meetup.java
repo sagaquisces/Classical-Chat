@@ -1,4 +1,4 @@
-package com.epicodus.classicalchat;
+package com.epicodus.classicalchat.models;
 
 /**
  * Created by Guest on 10/3/17.
@@ -36,7 +36,7 @@ public class Meetup {
     }
 
     public String getDescription() {
-        return mLink;
+        return mDescription;
     }
 
     public String getLocation() {

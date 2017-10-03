@@ -1,7 +1,7 @@
-package com.epicodus.classicalchat;
+package com.epicodus.classicalchat.services;
 
-import android.util.Log;
-import android.widget.Toast;
+import com.epicodus.classicalchat.Constants;
+import com.epicodus.classicalchat.models.Meetup;
 
 import org.json.JSONArray;
 import org.json.JSONException;

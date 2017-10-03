@@ -1,4 +1,4 @@
-package com.epicodus.classicalchat;
+package com.epicodus.classicalchat.ui;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.epicodus.classicalchat.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

@@ -1,4 +1,4 @@
-package com.epicodus.classicalchat;
+package com.epicodus.classicalchat.ui;
 
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
@@ -9,6 +9,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.epicodus.classicalchat.adapters.ChatPagerAdapter;
+
+import com.epicodus.classicalchat.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.Bind;

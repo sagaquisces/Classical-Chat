@@ -1,14 +1,18 @@
-package com.epicodus.classicalchat;
+package com.epicodus.classicalchat.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.epicodus.classicalchat.ui.ChatsFragment;
+import com.epicodus.classicalchat.ui.FriendsFragment;
+import com.epicodus.classicalchat.ui.RequestsFragment;
+
 /**
- * Created by Guest on 10/2/17.
+ * Created by Guest on 10/3/17.
  */
 
-class ChatPagerAdapter extends FragmentPagerAdapter{
+public class ChatPagerAdapter extends FragmentPagerAdapter {
     public ChatPagerAdapter(FragmentManager fm) {
         super(fm);
     }

@@ -1,9 +1,8 @@
-package com.epicodus.classicalchat;
+package com.epicodus.classicalchat.ui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
-import android.provider.Contacts;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.epicodus.classicalchat.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,11 +26,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
-
-import org.w3c.dom.Text;
-
-import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

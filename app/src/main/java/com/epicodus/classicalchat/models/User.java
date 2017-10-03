@@ -1,4 +1,4 @@
-package com.epicodus.classicalchat;
+package com.epicodus.classicalchat.models;
 
 /**
  * Created by Guest on 10/2/17.
