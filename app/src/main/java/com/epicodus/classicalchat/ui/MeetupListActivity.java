@@ -48,7 +48,10 @@ public class MeetupListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_meetups);
         ButterKnife.bind(this);
 
-        String location = "98101"; //for temporary use
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mRecentAddress = mSharedPreferences.getString(Constants.PREFERENCE_LOCATION_KEY, null);
+
+        String location = (mRecentAddress==null)?"Seattle":mRecentAddress;
 
         mLocationTextView.setText("Here are all the meetups near:" + location);
 
@@ -59,7 +62,7 @@ public class MeetupListActivity extends AppCompatActivity {
 //        Intent intent = getIntent();
 //        String location = intent.getStringExtra("location")
 
-        getMeetups(location);
+        getMeetups(location); //default will currently be Seattle
     }
 
     @Override
@@ -80,6 +83,7 @@ public class MeetupListActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 addToSharedPreferences(query);
+                mLocationTextView.setText("Here are all the meetups near:" + query);
                 getMeetups(query);
                 return false;
             }
