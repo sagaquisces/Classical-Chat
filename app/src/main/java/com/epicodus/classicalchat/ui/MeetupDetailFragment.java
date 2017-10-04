@@ -81,11 +81,11 @@ public class MeetupDetailFragment extends Fragment implements View.OnClickListen
         }
 
         if (v == mSaveBtn) {
-            DatabaseReference restaurantRef = FirebaseDatabase
+            DatabaseReference meetupRef = FirebaseDatabase
                     .getInstance()
                     .getReference(Constants.FIREBASE_CHILD_MEETUPS);
 
-            restaurantRef.push().setValue(mMeetup);
+            meetupRef.push().setValue(mMeetup);
             Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
         }
 
