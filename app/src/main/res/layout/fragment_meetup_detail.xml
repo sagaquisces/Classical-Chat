@@ -13,7 +13,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="180dp"
-            android:id="@+id/restaurantImageView"
+            android:id="@+id/meetupImageView"
             android:src="@mipmap/ic_launcher"
             android:scaleType="centerCrop" />
 
@@ -103,11 +103,11 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Save Restaurant"
-                android:id="@+id/saveRestaurantButton"
+                android:text="Save to Favorites"
+                android:id="@+id/saveMeetupButton"
                 android:layout_alignParentBottom="true"
                 android:background="@color/colorAccent"
-                android:textColor="@color/colorTextIcons"
+                android:textColor="#ffffff"
                 android:textSize="15sp" />
         </RelativeLayout>
     </LinearLayout>

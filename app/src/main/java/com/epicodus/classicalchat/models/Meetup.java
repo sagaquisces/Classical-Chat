@@ -4,14 +4,20 @@ package com.epicodus.classicalchat.models;
  * Created by Guest on 10/3/17.
  */
 
+import org.parceler.Parcel;
+
+
+@Parcel
 public class Meetup {
-    private double mScore; //score
-    private String mName; //name
-    private String mLink; //link
-    private String mDescription; //description in HTML format
-    private String mLocation; //localized_location, may be in suburb city
-    private String mOrganizer; //organizer
-    private String mImageUrl; //group_photo --> photo_link
+    double mScore; //score
+    String mName; //name
+    String mLink; //link
+    String mDescription; //description in HTML format
+    String mLocation; //localized_location, may be in suburb city
+    String mOrganizer; //organizer
+    String mImageUrl; //group_photo --> photo_link
+
+    public Meetup() {}
 
     public Meetup(double score, String name, String link, String description, String location, String organizer, String imageUrl) {
         this.mScore = score;

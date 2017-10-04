@@ -1,6 +1,7 @@
 package com.epicodus.classicalchat.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,10 @@ import android.widget.TextView;
 
 import com.epicodus.classicalchat.R;
 import com.epicodus.classicalchat.models.Meetup;
+import com.epicodus.classicalchat.ui.MeetupDetailActivity;
 import com.squareup.picasso.Picasso;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -47,7 +51,7 @@ public class MeetupListAdapter extends RecyclerView.Adapter<MeetupListAdapter.Me
         return mMeetups.size();
     }
 
-    public class MeetupViewHolder extends RecyclerView.ViewHolder {
+    public class MeetupViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @Bind(R.id.meetupImageView) ImageView mImageView;
         @Bind(R.id.meetupNameTextView) TextView mNameTextView;
@@ -60,6 +64,7 @@ public class MeetupListAdapter extends RecyclerView.Adapter<MeetupListAdapter.Me
             super(itemView);
             ButterKnife.bind(this, itemView);
             mContext = itemView.getContext();
+            itemView.setOnClickListener(this);
         }
 
         public void bindMeetup(Meetup meetup) {
@@ -67,6 +72,15 @@ public class MeetupListAdapter extends RecyclerView.Adapter<MeetupListAdapter.Me
             mNameTextView.setText(meetup.getName());
             mLocationTextView.setText(meetup.getLocation());
             mScoreTextView.setText("Score: " + meetup.getScore());
+        }
+
+        @Override
+        public void onClick(View v) {
+            int itemPosition = getLayoutPosition();
+            Intent intent = new Intent(mContext, MeetupDetailActivity.class);
+            intent.putExtra("position", itemPosition);
+            intent.putExtra("meetups", Parcels.wrap(mMeetups));
+            mContext.startActivity(intent);
         }
     }
 }

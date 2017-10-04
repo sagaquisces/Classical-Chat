@@ -1,8 +1,38 @@
 package com.epicodus.classicalchat.adapters;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+
+import com.epicodus.classicalchat.models.Meetup;
+import com.epicodus.classicalchat.ui.MeetupDetailFragment;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 /**
  * Created by Guest on 10/3/17.
  */
 
-public class MeetupPagerAdapter {
+public class MeetupPagerAdapter extends FragmentPagerAdapter{
+    private ArrayList<Meetup> mMeetups;
+    public MeetupPagerAdapter(FragmentManager fm, ArrayList<Meetup> meetups) {
+        super(fm);
+        mMeetups = meetups;
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        return MeetupDetailFragment.newInstance(mMeetups.get(position));
+    }
+
+    @Override
+    public int getCount() {
+        return mMeetups.size();
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return mMeetups.get(position).getName();
+    }
 }
