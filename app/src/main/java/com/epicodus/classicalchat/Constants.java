@@ -11,7 +11,11 @@ public class Constants {
     public static final String MEETUP_CLASSICAL_MUSIC_TOPIC_ID = "133";
     public static final String MEETUP_BASE_URL = "https://api.meetup.com/find/groups?photo-host=public";
     public static final String MEETUP_LOCATION_QUERY_PARAMETER = "location";
+    public static final String MEETUP_RADIUS_QUERY_PARAMETER = "radius";
+    public static final String MEETUP_RADIUS_VALUE = "100";
 
     public static final String PREFERENCE_LOCATION_KEY = "location";
+
+    public static final String FIREBASE_CHILD_MEETUPS = "meetups";
 
 }

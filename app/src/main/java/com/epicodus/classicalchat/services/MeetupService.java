@@ -31,6 +31,7 @@ public class MeetupService {
         urlBuilder.addQueryParameter(Constants.MEETUP_API_KEY_PARAMETER, Constants.MEETUP_API_KEY);
         urlBuilder.addQueryParameter(Constants.MEETUP_TOPIC_QUERY_PARAMETER, Constants.MEETUP_CLASSICAL_MUSIC_TOPIC_ID);
         urlBuilder.addQueryParameter(Constants.MEETUP_LOCATION_QUERY_PARAMETER, location);
+        urlBuilder.addQueryParameter(Constants.MEETUP_RADIUS_QUERY_PARAMETER, Constants.MEETUP_RADIUS_VALUE);
         String url = urlBuilder.build().toString();
 
         Request request = new Request.Builder()

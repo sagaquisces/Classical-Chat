@@ -10,9 +10,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.epicodus.classicalchat.Constants;
 import com.epicodus.classicalchat.R;
 import com.epicodus.classicalchat.models.Meetup;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
@@ -24,7 +28,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MeetupDetailFragment extends Fragment {
+public class MeetupDetailFragment extends Fragment implements View.OnClickListener {
     @Bind(R.id.meetupImageView) ImageView mImageLabel;
     @Bind(R.id.meetupNameTextView) TextView mNameLabel;
     @Bind(R.id.scoreTextView) TextView mScoreLabel;
@@ -62,7 +66,28 @@ public class MeetupDetailFragment extends Fragment {
         mLocationLabel.setText(mMeetup.getLocation());
         mDescriptionLabel.setText(mMeetup.getDescription());
 
+        mWebsiteLabel.setOnClickListener(this);
+
+        mSaveBtn.setOnClickListener(this);
+
+
         return view;
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v == mWebsiteLabel) {
+            Toast.makeText(getContext(), "Will eventually go to website", Toast.LENGTH_SHORT);
+        }
+
+        if (v == mSaveBtn) {
+            DatabaseReference restaurantRef = FirebaseDatabase
+                    .getInstance()
+                    .getReference(Constants.FIREBASE_CHILD_MEETUPS);
+
+            restaurantRef.push().setValue(mMeetup);
+            Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
+        }
+
+    }
 }
