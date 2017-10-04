@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context="com.epicodus.classicalchat.ui.MeetupListActivity">
 
+    <include layout="@layout/app_bar_layout" android:id="@+id/meetups_list_toolbar" />
+
     <TextView
         android:id="@+id/locationTextView"
         android:layout_width="0dp"
@@ -18,7 +20,7 @@
         android:text="Meetups Activity"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/meetups_list_toolbar" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"

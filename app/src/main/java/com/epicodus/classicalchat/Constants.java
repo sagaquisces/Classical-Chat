@@ -12,4 +12,6 @@ public class Constants {
     public static final String MEETUP_BASE_URL = "https://api.meetup.com/find/groups?photo-host=public";
     public static final String MEETUP_LOCATION_QUERY_PARAMETER = "location";
 
+    public static final String PREFERENCE_LOCATION_KEY = "location";
+
 }
