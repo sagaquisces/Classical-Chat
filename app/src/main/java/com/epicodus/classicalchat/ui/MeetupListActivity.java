@@ -1,5 +1,6 @@
 package com.epicodus.classicalchat.ui;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
@@ -12,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.epicodus.classicalchat.Constants;
@@ -29,7 +32,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class MeetupListActivity extends AppCompatActivity {
+public class MeetupListActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String TAG = MeetupListActivity.class.getSimpleName();
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
@@ -38,6 +41,7 @@ public class MeetupListActivity extends AppCompatActivity {
     @Bind(R.id.meetups_list_toolbar) Toolbar mToolbar;
     @Bind(R.id.locationTextView) TextView mLocationTextView;
     @Bind(R.id.recyclerView) RecyclerView mRecyclerView;
+    @Bind(R.id.savedMeetupsBtn) Button mSavedBtn;
     private MeetupListAdapter mAdapter;
 
     public ArrayList<Meetup> mMeetups = new ArrayList<>();
@@ -57,6 +61,8 @@ public class MeetupListActivity extends AppCompatActivity {
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Classical Chat");
+
+        mSavedBtn.setOnClickListener(this);
 
         //need corresponding intent from MainActivity
 //        Intent intent = getIntent();
@@ -132,5 +138,14 @@ public class MeetupListActivity extends AppCompatActivity {
 
     private void addToSharedPreferences (String location) {
         mEditor.putString(Constants.PREFERENCE_LOCATION_KEY, location).apply();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == mSavedBtn) {
+            Intent intent = new Intent(MeetupListActivity.this, SavedMeetupListActivity.class);
+            startActivity(intent);
+        }
+
     }
 }
