@@ -1,0 +1,115 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.epicodus.classicalchat.ui.MeetupDetailFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:id="@+id/restaurantImageView"
+            android:src="@mipmap/ic_launcher"
+            android:scaleType="centerCrop" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:paddingTop="20dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Meetup Name"
+                android:id="@+id/meetupNameTextView"
+                android:layout_alignParentStart="true"
+                android:textSize="20sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Score: 1"
+                android:id="@+id/scoreTextView"
+                android:layout_alignTop="@+id/meetupNameTextView"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                android:id="@+id/locationTextView"
+                android:layout_below="@+id/meetupNameTextView"
+                android:layout_alignParentStart="true"
+                android:textColor="@color/colorSecondaryText" />
+
+            <TextView
+                android:id="@+id/websiteTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_exit_to_app_black_24dp"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                android:text="View Online"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBottom="@+id/locationTextView"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ScrollView
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_above="@+id/saveRestaurantButton"
+                android:paddingLeft="30dp"
+                android:paddingTop="20dp"
+                android:paddingRight="30dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Description will go here."
+                    android:drawablePadding="4dp"
+                    android:id="@+id/descriptionTextView"
+                    android:textColor="#ffffff"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center_vertical"/>
+
+            </ScrollView>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Save Restaurant"
+                android:id="@+id/saveRestaurantButton"
+                android:layout_alignParentBottom="true"
+                android:background="@color/colorAccent"
+                android:textColor="@color/colorTextIcons"
+                android:textSize="15sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</FrameLayout>

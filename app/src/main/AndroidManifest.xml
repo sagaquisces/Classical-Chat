@@ -38,7 +38,8 @@
         <activity
             android:name=".ui.UsersActivity"
             android:parentActivityName=".ui.MainActivity" />
-        <activity android:name=".ui.MeetupsActivity"></activity>
+        <activity android:name=".ui.MeetupListActivity" />
+        <activity android:name=".ui.MeetupDetailActivity"></activity>
     </application>
 
 </manifest>

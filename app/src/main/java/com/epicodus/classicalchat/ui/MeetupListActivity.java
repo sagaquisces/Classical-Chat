@@ -4,9 +4,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.epicodus.classicalchat.adapters.MeetupListAdapter;
@@ -23,8 +20,8 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class MeetupsActivity extends AppCompatActivity {
-    public static final String TAG = MeetupsActivity.class.getSimpleName();
+public class MeetupListActivity extends AppCompatActivity {
+    public static final String TAG = MeetupListActivity.class.getSimpleName();
 
     @Bind(R.id.locationTextView) TextView mLocationTextView;
     @Bind(R.id.recyclerView) RecyclerView mRecyclerView;
@@ -62,13 +59,13 @@ public class MeetupsActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) {
                 mMeetups = meetupService.processResults(response);
 
-                MeetupsActivity.this.runOnUiThread(new Runnable() {
+                MeetupListActivity.this.runOnUiThread(new Runnable() {
 
                     @Override
                     public void run() {
                         mAdapter = new MeetupListAdapter(getApplicationContext(), mMeetups);
                         mRecyclerView.setAdapter(mAdapter);
-                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MeetupsActivity.this);
+                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MeetupListActivity.this);
                         mRecyclerView.setLayoutManager(layoutManager);
                         mRecyclerView.setHasFixedSize(true);
 

@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if(view == mMeetupBtn) {
-            Intent main_intent = new Intent(MainActivity.this, MeetupsActivity.class);
+            Intent main_intent = new Intent(MainActivity.this, MeetupListActivity.class);
             startActivity(main_intent);
         }
 
