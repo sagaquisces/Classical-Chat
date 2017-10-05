@@ -27,6 +27,7 @@ import com.google.firebase.database.Query;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Guest on 10/5/17.
@@ -129,6 +130,8 @@ public class FirebaseMeetupListAdapter extends FirebaseRecyclerAdapter<Meetup, F
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
+        Collections.swap(mMeetups, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
         return false;
     }
 
