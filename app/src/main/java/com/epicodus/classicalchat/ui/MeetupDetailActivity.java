@@ -17,6 +17,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MeetupDetailActivity extends AppCompatActivity {
+    private String mSource;
     @Bind(R.id.viewPager) ViewPager mViewPager;
     private MeetupPagerAdapter adapterViewPager;
     ArrayList<Meetup> mMeetups = new ArrayList<>();
@@ -28,9 +29,10 @@ public class MeetupDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         mMeetups = Parcels.unwrap(getIntent().getParcelableExtra(Constants.EXTRA_KEY_MEETUPS));
+        mSource = getIntent().getStringExtra(Constants.KEY_SOURCE);
         int startingPosition = getIntent().getIntExtra(Constants.EXTRA_KEY_POSITION, 0);
 
-        adapterViewPager = new MeetupPagerAdapter(getSupportFragmentManager(), mMeetups);
+        adapterViewPager = new MeetupPagerAdapter(getSupportFragmentManager(), mMeetups, mSource);
         mViewPager.setAdapter(adapterViewPager);
         mViewPager.setCurrentItem(startingPosition);
 

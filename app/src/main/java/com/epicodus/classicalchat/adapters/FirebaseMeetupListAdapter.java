@@ -2,12 +2,19 @@ package com.epicodus.classicalchat.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.res.ConfigurationHelper;
 import android.support.v4.view.MotionEventCompat;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.epicodus.classicalchat.Constants;
+import com.epicodus.classicalchat.R;
 import com.epicodus.classicalchat.models.Meetup;
 import com.epicodus.classicalchat.ui.MeetupDetailActivity;
+import com.epicodus.classicalchat.ui.MeetupDetailFragment;
 import com.epicodus.classicalchat.util.ItemTouchHelperAdapter;
 import com.epicodus.classicalchat.util.OnStartDragListener;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -42,6 +49,7 @@ public class FirebaseMeetupListAdapter extends FirebaseRecyclerAdapter<Meetup, F
     private ChildEventListener mChildEventListener;
     private Context mContext;
     private ArrayList<Meetup> mMeetups = new ArrayList<>();
+    private int mOrientation;
 
     public FirebaseMeetupListAdapter (Class<Meetup> modelClass, int modelLayout, Class<FirebaseMeetupViewHolder> viewHolderClass, Query ref, OnStartDragListener onStartDragListener, Context context) {
         super(modelClass, modelLayout, viewHolderClass, ref);
@@ -78,14 +86,11 @@ public class FirebaseMeetupListAdapter extends FirebaseRecyclerAdapter<Meetup, F
     }
 
     @Override
-    public boolean onItemMove(int fromPosition, int toPosition) {
-        return false;
-    }
-
-
-    @Override
     protected void populateViewHolder(final FirebaseMeetupViewHolder viewHolder, Meetup model, int position) {
         viewHolder.bindMeetup(model);
+
+        mOrientation = viewHolder.itemView.getResources().getConfiguration().orientation;
+        if (mOrientation == Configuration.ORIENTATION_LANDSCAPE) {createDetailFragment(0);}
 
         viewHolder.mMeetupImageView.setOnTouchListener(new View.OnTouchListener() {
 
@@ -101,13 +106,32 @@ public class FirebaseMeetupListAdapter extends FirebaseRecyclerAdapter<Meetup, F
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, MeetupDetailActivity.class);
-                intent.putExtra("position", viewHolder.getAdapterPosition());
-                intent.putExtra("meetups", Parcels.wrap(mMeetups));
-                mContext.startActivity(intent);
+                int itemPosition = viewHolder.getAdapterPosition();
+                if (mOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    createDetailFragment(itemPosition);
+                } else {
+                    Intent intent = new Intent(mContext, MeetupDetailActivity.class);
+                    intent.putExtra(Constants.EXTRA_KEY_POSITION, viewHolder.getAdapterPosition());
+                    intent.putExtra(Constants.EXTRA_KEY_MEETUPS, Parcels.wrap(mMeetups));
+                    intent.putExtra(Constants.KEY_SOURCE, Constants.SOURCE_SAVED);
+                    mContext.startActivity(intent);
+                }
             }
         });
     }
+
+    private void createDetailFragment(int position) {
+        MeetupDetailFragment detailFragment = MeetupDetailFragment.newInstance(mMeetups, position, Constants.SOURCE_SAVED);
+        FragmentTransaction ft = ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.meetupDetailContainer, detailFragment);
+        ft.commit();
+    }
+
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        return false;
+    }
+
 
     @Override
     public void onItemDismiss(int position) {

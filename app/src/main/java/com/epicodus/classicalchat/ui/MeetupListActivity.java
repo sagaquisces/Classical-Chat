@@ -28,6 +28,7 @@ public class MeetupListActivity extends AppCompatActivity implements View.OnClic
 
     private Integer mPosition;
     ArrayList<Meetup> mMeetups;
+    String mSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +43,13 @@ public class MeetupListActivity extends AppCompatActivity implements View.OnClic
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                 mPosition = savedInstanceState.getInt(Constants.EXTRA_KEY_POSITION);
                 mMeetups = Parcels.unwrap(savedInstanceState.getParcelable(Constants.EXTRA_KEY_MEETUPS));
+                mSource = savedInstanceState.getString(Constants.KEY_SOURCE);
 
                 if (mPosition != null && mMeetups != null) {
                     Intent intent = new Intent(this, MeetupDetailActivity.class);
                     intent.putExtra(Constants.EXTRA_KEY_POSITION, mPosition);
                     intent.putExtra(Constants.EXTRA_KEY_MEETUPS, Parcels.wrap(mMeetups));
+                    intent.putExtra(Constants.KEY_SOURCE, mSource);
                     startActivity(intent);
                 }
             }
@@ -63,6 +66,7 @@ public class MeetupListActivity extends AppCompatActivity implements View.OnClic
         if (mPosition != null && mMeetups != null) {
             outState.putInt(Constants.EXTRA_KEY_POSITION, mPosition);
             outState.putParcelable(Constants.EXTRA_KEY_MEETUPS, Parcels.wrap(mMeetups));
+            outState.putString(Constants.KEY_SOURCE, mSource);
         }
     }
 
@@ -76,9 +80,10 @@ public class MeetupListActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
-    public void onMeetupSelected(Integer position, ArrayList<Meetup> meetups) {
+    public void onMeetupSelected(Integer position, ArrayList<Meetup> meetups, String source) {
         mPosition = position;
         mMeetups = meetups;
+        mSource = source;
 
     }
 }

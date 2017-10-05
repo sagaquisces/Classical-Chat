@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.epicodus.classicalchat.Constants;
 import com.epicodus.classicalchat.R;
@@ -23,6 +24,8 @@ public class SavedMeetupListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_saved_meetups_list);
+
+        Log.v("LOOK HERE", "LOOK HERE");
 //        ButterKnife.bind(this);
 
     }

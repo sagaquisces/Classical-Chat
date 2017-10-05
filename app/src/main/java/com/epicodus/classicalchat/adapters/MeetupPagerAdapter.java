@@ -16,14 +16,17 @@ import java.util.ArrayList;
 
 public class MeetupPagerAdapter extends FragmentPagerAdapter{
     private ArrayList<Meetup> mMeetups;
-    public MeetupPagerAdapter(FragmentManager fm, ArrayList<Meetup> meetups) {
+    private String mSource;
+
+    public MeetupPagerAdapter(FragmentManager fm, ArrayList<Meetup> meetups, String source) {
         super(fm);
         mMeetups = meetups;
+        mSource = source;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return MeetupDetailFragment.newInstance(mMeetups.get(position));
+        return MeetupDetailFragment.newInstance(mMeetups, position, mSource);
     }
 
     @Override

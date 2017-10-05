@@ -17,8 +17,13 @@ public class Constants {
     public static final String PREFERENCE_LOCATION_KEY = "location";
 
     public static final String FIREBASE_CHILD_MEETUPS = "meetups";
+    public static final String FIREBASE_QUERY_INDEX = "index";
 
     public static final String EXTRA_KEY_POSITION = "position";
     public static final String EXTRA_KEY_MEETUPS = "restaurants";
+
+    public static final String KEY_SOURCE = "source";
+    public static final String SOURCE_SAVED = "saved";
+    public static final String SOURCE_FIND = "find";
 
 }

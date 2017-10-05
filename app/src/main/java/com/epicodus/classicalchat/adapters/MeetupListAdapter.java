@@ -3,6 +3,8 @@ package com.epicodus.classicalchat.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import com.epicodus.classicalchat.Constants;
 import com.epicodus.classicalchat.R;
 import com.epicodus.classicalchat.models.Meetup;
 import com.epicodus.classicalchat.ui.MeetupDetailActivity;
+import com.epicodus.classicalchat.ui.MeetupDetailFragment;
 import com.epicodus.classicalchat.util.OnMeetupSelectedListener;
 import com.squareup.picasso.Picasso;
 
@@ -87,7 +90,15 @@ public class MeetupListAdapter extends RecyclerView.Adapter<MeetupListAdapter.Me
             itemView.setOnClickListener(this);
         }
 
-        private void createDetailFragment(int i) {
+        private void createDetailFragment(int position) {
+            // Creates new RestaurantDetailFragment with the given position:
+            MeetupDetailFragment detailFragment = MeetupDetailFragment.newInstance(mMeetups, position, Constants.SOURCE_FIND);
+            // Gathers necessary components to replace the FrameLayout in the layout with the RestaurantDetailFragment:
+            FragmentTransaction ft = ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction();
+            //  Replaces the FrameLayout with the RestaurantDetailFragment:
+            ft.replace(R.id.meetupDetailContainer, detailFragment);
+            // Commits these changes:
+            ft.commit();
         }
 
         public void bindMeetup(Meetup meetup) {
@@ -100,13 +111,14 @@ public class MeetupListAdapter extends RecyclerView.Adapter<MeetupListAdapter.Me
         @Override
         public void onClick(View v) {
             int itemPosition = getLayoutPosition();
-            mOnMeetupSelectedListener.onMeetupSelected(itemPosition, mMeetups);
+            mMeetupSelectedListener.onMeetupSelected(itemPosition, mMeetups, Constants.SOURCE_FIND);
             if (mOrientation == Configuration.ORIENTATION_LANDSCAPE) {
                 createDetailFragment(itemPosition);
             } else {
                 Intent intent = new Intent(mContext, MeetupDetailActivity.class);
                 intent.putExtra(Constants.EXTRA_KEY_POSITION, itemPosition);
                 intent.putExtra(Constants.EXTRA_KEY_MEETUPS, Parcels.wrap(mMeetups));
+                intent.putExtra(Constants.KEY_SOURCE, Constants.SOURCE_FIND);
                 mContext.startActivity(intent);
             }
 

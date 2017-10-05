@@ -9,5 +9,5 @@ import java.util.ArrayList;
  */
 
 public interface OnMeetupSelectedListener {
-    public void onMeetupSelected(Integer position, ArrayList<Meetup> meetups);
+    public void onMeetupSelected(Integer position, ArrayList<Meetup> meetups, String source);
 }

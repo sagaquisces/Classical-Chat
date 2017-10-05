@@ -15,11 +15,15 @@ import android.widget.Toast;
 import com.epicodus.classicalchat.Constants;
 import com.epicodus.classicalchat.R;
 import com.epicodus.classicalchat.models.Meetup;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -38,11 +42,17 @@ public class MeetupDetailFragment extends Fragment implements View.OnClickListen
     @Bind(R.id.saveMeetupButton) Button mSaveBtn;
 
     private Meetup mMeetup;
+    private ArrayList<Meetup> mMeetups;
+    private int mPosition;
+    private String mSource;
 
-    public static MeetupDetailFragment newInstance(Meetup meetup) {
+    public static MeetupDetailFragment newInstance(ArrayList<Meetup> meetups, Integer position, String source) {
         MeetupDetailFragment meetupDetailFragment = new MeetupDetailFragment();
         Bundle args = new Bundle();
-        args.putParcelable("meetup", Parcels.wrap(meetup));
+        args.putParcelable(Constants.EXTRA_KEY_MEETUPS, Parcels.wrap(meetups));
+        args.putInt(Constants.EXTRA_KEY_POSITION, position);
+        args.putString(Constants.KEY_SOURCE, source);
+
         meetupDetailFragment.setArguments(args);
         return meetupDetailFragment;
     }
@@ -50,7 +60,10 @@ public class MeetupDetailFragment extends Fragment implements View.OnClickListen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMeetup = Parcels.unwrap(getArguments().getParcelable("meetup"));
+        mMeetups = Parcels.unwrap(getArguments().getParcelable(Constants.EXTRA_KEY_MEETUPS));
+        mPosition = getArguments().getInt(Constants.EXTRA_KEY_POSITION);
+        mMeetup = mMeetups.get(mPosition);
+        mSource = getArguments().getString(Constants.KEY_SOURCE);
     }
 
     @Override
@@ -68,8 +81,11 @@ public class MeetupDetailFragment extends Fragment implements View.OnClickListen
 
         mWebsiteLabel.setOnClickListener(this);
 
-        mSaveBtn.setOnClickListener(this);
-
+        if (mSource.equals(Constants.SOURCE_SAVED)) {
+            mSaveBtn.setVisibility(View.GONE);
+        } else {
+            mSaveBtn.setOnClickListener(this);
+        }
 
         return view;
     }
@@ -81,11 +97,18 @@ public class MeetupDetailFragment extends Fragment implements View.OnClickListen
         }
 
         if (v == mSaveBtn) {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            String uid = user.getUid();
             DatabaseReference meetupRef = FirebaseDatabase
                     .getInstance()
-                    .getReference(Constants.FIREBASE_CHILD_MEETUPS);
+                    .getReference(Constants.FIREBASE_CHILD_MEETUPS)
+                    .child(uid);
 
-            meetupRef.push().setValue(mMeetup);
+            DatabaseReference pushRef = meetupRef.push();
+            String pushId = pushRef.getKey();
+            mMeetup.setPushId(pushId);
+            pushRef.setValue(mMeetup);
+
             Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
         }
 

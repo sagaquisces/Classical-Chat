@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.epicodus.classicalchat.ui.MeetupListActivity">
+    tools:context="com.epicodus.classicalchat.ui.SavedMeetupListActivity">
 
     <include layout="@layout/app_bar_layout" android:id="@+id/meetups_list_toolbar"
         android:layout_height="56dp"
@@ -24,12 +24,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragmentMeetupList"
+        app:layout_constraintTop_toBottomOf="@+id/fragmentSavedMeetupList"
         app:layout_constraintVertical_bias="1.0" />
 
     <fragment
-        android:id="@+id/fragmentMeetupList"
-        android:name="com.epicodus.classicalchat.ui.MeetupListFragment"
+        android:id="@+id/fragmentSavedMeetupList"
+        android:name="com.epicodus.classicalchat.ui.SavedMeetupListFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
