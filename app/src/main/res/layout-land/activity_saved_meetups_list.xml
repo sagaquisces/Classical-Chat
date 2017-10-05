@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
+    android:showDividers="middle"
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <include layout="@layout/app_bar_layout" android:id="@+id/meetups_list_toolbar"
+        android:layout_height="56dp"
+        android:layout_width="match_parent" />
+
+    <LinearLayout
+        android:showDividers="middle"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="bottom"
+            android:layout_weight="6">
+
+            <fragment
+                android:id="@+id/fragmentItemsList"
+                android:name="com.epicodus.classicalchat.ui.SavedMeetupListFragment"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                tools:layout="@layout/fragment_meetup_list" />
+
+            <Button
+                android:id="@+id/meetupsBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Go to my Favorites"
+                android:visibility="visible" />
+
+        </LinearLayout>
+
+
+        <View android:background="@color/colorAccent"
+            android:layout_width="2dp"
+            android:layout_height="wrap_content"/>
+
+        <FrameLayout
+            android:id="@+id/meetupDetailContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -16,6 +16,8 @@ public class Meetup {
     String location; //localized_location, may be in suburb city
     String organizer; //organizer
     String imageUrl; //group_photo --> photo_link
+    private String pushId;
+    String index;
 
     public Meetup() {}
 
@@ -27,6 +29,7 @@ public class Meetup {
         this.location = location;
         this.organizer = organizer;
         this.imageUrl = imageUrl;
+        this.index = "not_specified";
     }
 
     public double getScore() {
@@ -57,4 +60,19 @@ public class Meetup {
         return imageUrl;
     }
 
+    public String getPushId(){
+        return pushId;
+    }
+
+    public void setPushId(String pushId){
+        this.pushId = pushId;
+    }
+
+    public String getIndex() {
+        return index;
+    }
+
+    public void setIndex(String index) {
+        this.index = index;
+    }
 }

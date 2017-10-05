@@ -17,39 +17,14 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class SavedMeetupListActivity extends AppCompatActivity {
-    private DatabaseReference mMeetupReference;
-    private FirebaseRecyclerAdapter mFirebaseAdapter;
-
-    @Bind(R.id.recyclerView) RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_meetups);
-        ButterKnife.bind(this);
+        setContentView(R.layout.activity_saved_meetups_list);
+//        ButterKnife.bind(this);
 
-        mMeetupReference = FirebaseDatabase.getInstance().getReference(Constants.FIREBASE_CHILD_MEETUPS);
-        setUpFirebaseAdapter();
     }
 
-    private void setUpFirebaseAdapter() {
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Meetup, FirebaseMeetupViewHolder>(Meetup.class, R.layout.meetup_list_item_drag, FirebaseMeetupViewHolder.class, mMeetupReference) {
-
-
-            @Override
-            protected void populateViewHolder(FirebaseMeetupViewHolder viewHolder, Meetup model, int position) {
-                viewHolder.bindMeetup(model);
-            }
-        };
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(mFirebaseAdapter);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mFirebaseAdapter.cleanup();
-    }
 }

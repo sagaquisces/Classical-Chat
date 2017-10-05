@@ -40,7 +40,7 @@
             android:parentActivityName=".ui.MainActivity" />
         <activity android:name=".ui.MeetupListActivity" />
         <activity android:name=".ui.MeetupDetailActivity" />
-        <activity android:name=".ui.SavedMeetupListActivity"></activity>
+        <activity android:name=".ui.SavedMeetupListActivity" />
     </application>
 
 </manifest>
