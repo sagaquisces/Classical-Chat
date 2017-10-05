@@ -1,50 +1,33 @@
 package com.epicodus.classicalchat.ui;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.v4.view.MenuItemCompat;
+
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.epicodus.classicalchat.Constants;
-import com.epicodus.classicalchat.adapters.MeetupListAdapter;
-import com.epicodus.classicalchat.services.MeetupService;
 import com.epicodus.classicalchat.R;
 import com.epicodus.classicalchat.models.Meetup;
+import com.epicodus.classicalchat.util.OnMeetupSelectedListener;
 
-import java.io.IOException;
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
-public class MeetupListActivity extends AppCompatActivity implements View.OnClickListener {
-    public static final String TAG = MeetupListActivity.class.getSimpleName();
-    private SharedPreferences mSharedPreferences;
-    private SharedPreferences.Editor mEditor;
-    private String mRecentAddress;
+public class MeetupListActivity extends AppCompatActivity implements View.OnClickListener,OnMeetupSelectedListener {
 
     @Bind(R.id.meetups_list_toolbar) Toolbar mToolbar;
-    @Bind(R.id.locationTextView) TextView mLocationTextView;
-    @Bind(R.id.recyclerView) RecyclerView mRecyclerView;
     @Bind(R.id.savedMeetupsBtn) Button mSavedBtn;
-    private MeetupListAdapter mAdapter;
 
-    public ArrayList<Meetup> mMeetups = new ArrayList<>();
+    private Integer mPosition;
+    ArrayList<Meetup> mMeetups;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,92 +35,35 @@ public class MeetupListActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_meetups);
         ButterKnife.bind(this);
 
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mRecentAddress = mSharedPreferences.getString(Constants.PREFERENCE_LOCATION_KEY, null);
-
-        String location = (mRecentAddress==null)?"Seattle":mRecentAddress;
-
-        mLocationTextView.setText("Here are all the meetups near:" + location);
-
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Classical Chat");
 
+        if (savedInstanceState != null) {
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                mPosition = savedInstanceState.getInt(Constants.EXTRA_KEY_POSITION);
+                mMeetups = Parcels.unwrap(savedInstanceState.getParcelable(Constants.EXTRA_KEY_MEETUPS));
+
+                if (mPosition != null && mMeetups != null) {
+                    Intent intent = new Intent(this, MeetupDetailActivity.class);
+                    intent.putExtra(Constants.EXTRA_KEY_POSITION, mPosition);
+                    intent.putExtra(Constants.EXTRA_KEY_MEETUPS, Parcels.wrap(mMeetups));
+                    startActivity(intent);
+                }
+            }
+        }
+
         mSavedBtn.setOnClickListener(this);
 
-        //need corresponding intent from MainActivity
-//        Intent intent = getIntent();
-//        String location = intent.getStringExtra("location")
-
-        getMeetups(location); //default will currently be Seattle
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.search_menu, menu);
-        ButterKnife.bind(this);
+    protected  void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mEditor = mSharedPreferences.edit();
-
-        MenuItem menuItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
-
-        searchView.setQueryHint("Enter a major city");
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                addToSharedPreferences(query);
-                mLocationTextView.setText("Here are all the meetups near:" + query);
-                getMeetups(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void getMeetups(String location) {
-        final MeetupService meetupService = new MeetupService();
-        meetupService.findMeetups(location, new Callback() {
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) {
-                mMeetups = meetupService.processResults(response);
-
-                MeetupListActivity.this.runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        mAdapter = new MeetupListAdapter(getApplicationContext(), mMeetups);
-                        mRecyclerView.setAdapter(mAdapter);
-                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MeetupListActivity.this);
-                        mRecyclerView.setLayoutManager(layoutManager);
-                        mRecyclerView.setHasFixedSize(true);
-
-                    }
-                });
-            }
-        });
-    }
-
-    private void addToSharedPreferences (String location) {
-        mEditor.putString(Constants.PREFERENCE_LOCATION_KEY, location).apply();
+        if (mPosition != null && mMeetups != null) {
+            outState.putInt(Constants.EXTRA_KEY_POSITION, mPosition);
+            outState.putParcelable(Constants.EXTRA_KEY_MEETUPS, Parcels.wrap(mMeetups));
+        }
     }
 
     @Override
@@ -146,6 +72,13 @@ public class MeetupListActivity extends AppCompatActivity implements View.OnClic
             Intent intent = new Intent(MeetupListActivity.this, SavedMeetupListActivity.class);
             startActivity(intent);
         }
+
+    }
+
+    @Override
+    public void onMeetupSelected(Integer position, ArrayList<Meetup> meetups) {
+        mPosition = position;
+        mMeetups = meetups;
 
     }
 }
