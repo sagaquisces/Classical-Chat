@@ -56,6 +56,7 @@ public class UsersActivity extends AppCompatActivity {
             protected void populateViewHolder(UsersViewHolder viewHolder, User user, int position) {
 
                 viewHolder.setName(user.getName());
+                viewHolder.setStatus(user.getStatus());
             }
         };
 
@@ -76,6 +77,11 @@ public class UsersActivity extends AppCompatActivity {
             TextView userNameView = (TextView) mView.findViewById(R.id.user_single_name);
             userNameView.setText(name);
 
+        }
+
+        public void setStatus(String status) {
+            TextView userStatusView = (TextView) mView.findViewById(R.id.user_single_status);
+            userStatusView.setText(status);
         }
     }
 }
