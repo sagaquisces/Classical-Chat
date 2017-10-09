@@ -1,11 +1,13 @@
 package com.epicodus.classicalchat.ui;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -32,6 +34,8 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
+    @Bind(R.id.settings_toolbar) Toolbar mToolbar;
+
     @Bind(R.id.settings_image) CircleImageView mCircleImageView;
     @Bind(R.id.settings_name_textView) TextView mNameTextView;
     @Bind(R.id.settings_status_textView) TextView mStatusTextView;
@@ -42,6 +46,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private FirebaseUser mCurrentUser;
 
     private static final int GALLERY_PIC = 1;
+    private static final int REQUEST_IMAGE_CAPTURE = 111;
 
     // Storage Firebase
 
@@ -89,6 +94,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
+
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("Account Settings");
+
         mChangeImageBtn.setOnClickListener(this);
         mChangeStatusBtn.setOnClickListener(this);
 
@@ -97,12 +106,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-        if (view == mChangeImageBtn) {
-            Intent gallery_intent = new Intent();
-            gallery_intent.setType("image/*");
-            gallery_intent.setAction(Intent.ACTION_GET_CONTENT);
 
-            startActivityForResult(Intent.createChooser(gallery_intent, "SELECT_IMAGE"), GALLERY_PIC);
+        if (view == mChangeImageBtn) {
+            CropImage.startPickImageActivity(this);
+//            Intent gallery_intent = new Intent();
+//            gallery_intent.setType("image/*");
+//            gallery_intent.setAction(Intent.ACTION_GET_CONTENT);
+//
+//            startActivityForResult(Intent.createChooser(gallery_intent, "SELECT_IMAGE"), GALLERY_PIC);
 
 //            CropImage.activity()
 //                    .setGuidelines(CropImageView.Guidelines.ON)
@@ -119,27 +130,82 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        super.onCreateOptionsMenu(menu);
+//
+//        getMenuInflater().inflate(R.menu.menu_photo, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.action_photo:
+//                onLaunchCamera();
+//            default:
+//                break;
+//        }
+//        return false;
+//    }
+
+//    private void onLaunchCamera() {
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        if (takePictureIntent.resolveActivity(this.getPackageManager()) != null) {
+//            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//        }
+//    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+//        super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == GALLERY_PIC && resultCode == RESULT_OK) {
+//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+//            mCircleImageView.setImageBitmap(imageBitmap);
+//            Uri imageUri = data.getData();
+//
+//            CropImage.activity(imageUri)
+//                    .setAspectRatio(1, 1)
+//                    .start(this);
+//            encodeBitmapAndSaveToFirebase(imageBitmap);
+//        }
 
+        // handle result of pick image chooser
+        if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == RESULT_OK) {
             mProgressDialog = new ProgressDialog(SettingsActivity.this);
             mProgressDialog.setTitle("Uploading Image");
             mProgressDialog.setMessage("Please wait...");
             mProgressDialog.setCanceledOnTouchOutside(false);
             mProgressDialog.show();
+            Uri imageUri = CropImage.getPickImageResultUri(this, data);
 
-            Uri imageUri = data.getData();
-
-            CropImage.activity(imageUri)
-                    .setAspectRatio(1, 1)
-                    .start(this);
-
-            Toast.makeText(SettingsActivity.this, "Hold on", Toast.LENGTH_LONG).show();
-
+            // For API >= 23 we need to check specifically that we have permissions to read external storage.
+            if (CropImage.isReadExternalStoragePermissionsRequired(this, imageUri)) {
+                // request permissions and handle the result in onRequestPermissionsResult()
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
+            } else {
+                // no permissions required or already grunted, can start crop image activity
+                startCropImageActivity(imageUri);
+            }
         }
+
+//        if((requestCode == GALLERY_PIC) && resultCode == RESULT_OK) {
+//
+//            mProgressDialog = new ProgressDialog(SettingsActivity.this);
+//            mProgressDialog.setTitle("Uploading Image");
+//            mProgressDialog.setMessage("Please wait...");
+//            mProgressDialog.setCanceledOnTouchOutside(false);
+//            mProgressDialog.show();
+//
+//            Uri imageUri = data.getData();
+//
+//            CropImage.activity(imageUri)
+//                    .setAspectRatio(1, 1)
+//                    .start(this);
+//
+//        }
 
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
 
@@ -182,5 +248,18 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             }
         }
     }
+
+    private void startCropImageActivity(Uri imageUri) {
+        CropImage.activity(imageUri)
+                .setAspectRatio(1, 1)
+                .start(this);
+    }
+
+//    private void encodeBitmapAndSaveToFirebase(Bitmap imageBitmap) {
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+//        String imageEncoded = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+//        mUserDatabase.child("image").setValue(imageEncoded);
+//    }
 
 }
