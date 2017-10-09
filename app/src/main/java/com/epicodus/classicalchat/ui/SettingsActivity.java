@@ -3,6 +3,7 @@ package com.epicodus.classicalchat.ui;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,9 +30,15 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
     @Bind(R.id.settings_toolbar) Toolbar mToolbar;
@@ -84,6 +91,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     Picasso
                             .with(SettingsActivity.this)
                             .load(image)
+//                            .placeholder(R.drawable.hermione_granger)
                             .into(mCircleImageView);
                 }
             }
@@ -97,6 +105,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Account Settings");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mChangeImageBtn.setOnClickListener(this);
         mChangeStatusBtn.setOnClickListener(this);
@@ -109,15 +118,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         if (view == mChangeImageBtn) {
             CropImage.startPickImageActivity(this);
-//            Intent gallery_intent = new Intent();
-//            gallery_intent.setType("image/*");
-//            gallery_intent.setAction(Intent.ACTION_GET_CONTENT);
-//
-//            startActivityForResult(Intent.createChooser(gallery_intent, "SELECT_IMAGE"), GALLERY_PIC);
-
-//            CropImage.activity()
-//                    .setGuidelines(CropImageView.Guidelines.ON)
-//                    .start(SettingsActivity.this);
         }
 
         if (view == mChangeStatusBtn) {
@@ -130,49 +130,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        super.onCreateOptionsMenu(menu);
-//
-//        getMenuInflater().inflate(R.menu.menu_photo, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_photo:
-//                onLaunchCamera();
-//            default:
-//                break;
-//        }
-//        return false;
-//    }
-
-//    private void onLaunchCamera() {
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        if (takePictureIntent.resolveActivity(this.getPackageManager()) != null) {
-//            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-//        }
-//    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-
-//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-//            Bundle extras = data.getExtras();
-//            Bitmap imageBitmap = (Bitmap) extras.get("data");
-//            mCircleImageView.setImageBitmap(imageBitmap);
-//            Uri imageUri = data.getData();
-//
-//            CropImage.activity(imageUri)
-//                    .setAspectRatio(1, 1)
-//                    .start(this);
-//            encodeBitmapAndSaveToFirebase(imageBitmap);
-//        }
-
-        // handle result of pick image chooser
         if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == RESULT_OK) {
             mProgressDialog = new ProgressDialog(SettingsActivity.this);
             mProgressDialog.setTitle("Uploading Image");
@@ -191,21 +150,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             }
         }
 
-//        if((requestCode == GALLERY_PIC) && resultCode == RESULT_OK) {
-//
-//            mProgressDialog = new ProgressDialog(SettingsActivity.this);
-//            mProgressDialog.setTitle("Uploading Image");
-//            mProgressDialog.setMessage("Please wait...");
-//            mProgressDialog.setCanceledOnTouchOutside(false);
-//            mProgressDialog.show();
-//
-//            Uri imageUri = data.getData();
-//
-//            CropImage.activity(imageUri)
-//                    .setAspectRatio(1, 1)
-//                    .start(this);
-//
-//        }
 
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
 
@@ -214,26 +158,59 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             if(resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
 
+                final File thumb_filePath = new File(resultUri.getPath());
+
                 String current_user_id = mCurrentUser.getUid();
 
+                Bitmap thumb_bitmap = new Compressor(this)
+                        .setMaxWidth(200)
+                        .setMaxHeight(200)
+                        .setQuality(75)
+                        .compressToBitmap(thumb_filePath);
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                final byte[] thumb_byte = baos.toByteArray();
+
                 StorageReference filepath = mImageStorage.child("profile_images").child(current_user_id + ".jpg");
+                final StorageReference thumb_filepath = mImageStorage.child("profile_images").child("thumbs").child(current_user_id + ".jpg");
 
                 filepath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @SuppressWarnings("VisibleForTests")
                     @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    public void onComplete(@NonNull final Task<UploadTask.TaskSnapshot> task) {
                         if(task.isSuccessful()){
-                            String download_url = task.getResult().getDownloadUrl().toString();
+                            final String download_url = task.getResult().getDownloadUrl().toString();
 
-                            mUserDatabase.child("image").setValue(download_url).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            UploadTask uploadTask = thumb_filepath.putBytes(thumb_byte);
+                            uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
+                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> thumb_task) {
+
+                                    String thumb_downloadUrl = thumb_task.getResult().getDownloadUrl().toString();
+                                    if(thumb_task.isSuccessful()) {
+
+                                        Map update_hashMap = new HashMap();
+                                        update_hashMap.put("image", download_url);
+                                        update_hashMap.put("thumb_image", thumb_downloadUrl);
+
+                                        mUserDatabase.updateChildren(update_hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    mProgressDialog.dismiss();
+                                                    Toast.makeText(SettingsActivity.this, "Success uploading", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+
+                                    } else {
+                                        Toast.makeText(SettingsActivity.this, "Error in uploading thumbnail", Toast.LENGTH_LONG).show();
                                         mProgressDialog.dismiss();
-                                        Toast.makeText(SettingsActivity.this, "Success uploading", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
+;
 
                         } else {
 
@@ -255,11 +232,5 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 .start(this);
     }
 
-//    private void encodeBitmapAndSaveToFirebase(Bitmap imageBitmap) {
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-//        String imageEncoded = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
-//        mUserDatabase.child("image").setValue(imageEncoded);
-//    }
 
 }
