@@ -1,6 +1,7 @@
 package com.epicodus.classicalchat.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -61,6 +62,19 @@ public class UsersActivity extends AppCompatActivity {
                 viewHolder.setName(user.getName());
                 viewHolder.setStatus(user.getStatus());
                 viewHolder.setUserImage(user.getThumb_image(), getApplicationContext());
+
+                final String user_id = getRef(position).getKey();
+
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Intent profile_intent = new Intent(UsersActivity.this, ProfileActivity.class);
+                        profile_intent.putExtra("user_id", user_id);
+                        startActivity(profile_intent);
+
+                    }
+                });
             }
         };
 
