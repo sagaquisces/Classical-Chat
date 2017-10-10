@@ -2,6 +2,7 @@ package com.epicodus.classicalchat.ui;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,6 +48,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private DatabaseReference mFriendReqDatabase;
     private DatabaseReference mFriendDatabase;
+    private DatabaseReference mNotificationsDatabase;
 
     private String mUserProfileID;
     private String mCurrent_state;
@@ -62,6 +65,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mUserProfileID);
         mFriendReqDatabase = FirebaseDatabase.getInstance().getReference().child("Friend_req");
         mFriendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
+        mNotificationsDatabase = FirebaseDatabase.getInstance().getReference().child("Notifications");
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         mCurrent_state = "not_friends";
@@ -184,11 +188,22 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    mCurrent_state = "req_sent";
-                                    mProfileSendReqBtn.setText("Cancel Friend Request");
+                                    HashMap<String, String> notificationData = new HashMap<>();
+                                    notificationData.put("from", mCurrentUser.getUid());
+                                    notificationData.put("type", "request");
 
-                                    mProfileDeclineBtn.setVisibility(View.INVISIBLE);
-                                    mProfileDeclineBtn.setEnabled(false);
+                                    mNotificationsDatabase.child(mUserProfileID).push().setValue(notificationData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            mCurrent_state = "req_sent";
+                                            mProfileSendReqBtn.setText("Cancel Friend Request");
+
+                                            mProfileDeclineBtn.setVisibility(View.INVISIBLE);
+                                            mProfileDeclineBtn.setEnabled(false);
+                                        }
+                                    });
+
+
                                 }
                             });
 
