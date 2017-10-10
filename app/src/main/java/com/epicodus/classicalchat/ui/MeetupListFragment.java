@@ -24,6 +24,10 @@ import com.epicodus.classicalchat.adapters.MeetupListAdapter;
 import com.epicodus.classicalchat.models.Meetup;
 import com.epicodus.classicalchat.services.MeetupService;
 import com.epicodus.classicalchat.util.OnMeetupSelectedListener;
+import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -31,9 +35,6 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -121,12 +122,12 @@ public class MeetupListFragment extends Fragment {
         meetupService.findMeetups(location, new Callback() {
 
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(Request request, IOException e) {
                 e.printStackTrace();
             }
 
             @Override
-            public void onResponse(Call call, Response response) {
+            public void onResponse(Response response) throws IOException {
                 mMeetups = meetupService.processResults(response);
 
                 getActivity().runOnUiThread(new Runnable() {
@@ -142,6 +143,7 @@ public class MeetupListFragment extends Fragment {
                     }
                 });
             }
+
         });
     }
 

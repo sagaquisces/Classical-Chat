@@ -2,6 +2,12 @@ package com.epicodus.classicalchat.services;
 
 import com.epicodus.classicalchat.Constants;
 import com.epicodus.classicalchat.models.Meetup;
+import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.HttpUrl;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,12 +16,12 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+//import okhttp3.Call;
+//import okhttp3.Callback;
+//import okhttp3.HttpUrl;
+//import okhttp3.OkHttpClient;
+//import okhttp3.Request;
+//import okhttp3.Response;
 
 /**
  * Created by Guest on 10/3/17.
@@ -24,8 +30,7 @@ import okhttp3.Response;
 public class MeetupService {
 
     public static void findMeetups(String location, Callback callback) {
-        OkHttpClient client = new OkHttpClient.Builder()
-                .build();
+        OkHttpClient client = new OkHttpClient();
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse(Constants.MEETUP_BASE_URL).newBuilder();
         urlBuilder.addQueryParameter(Constants.MEETUP_API_KEY_PARAMETER, Constants.MEETUP_API_KEY);
