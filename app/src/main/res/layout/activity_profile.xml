@@ -64,10 +64,11 @@
         android:id="@+id/profile_decline_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="17dp"
         android:backgroundTint="@color/colorAccent"
         android:text="Decline Friend Request"
         android:textColor="@color/colorIcons"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="17dp" />
+        android:visibility="invisible" />
 </RelativeLayout>
