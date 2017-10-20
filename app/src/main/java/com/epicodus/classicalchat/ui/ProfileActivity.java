@@ -2,7 +2,6 @@ package com.epicodus.classicalchat.ui;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -82,7 +81,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String name = dataSnapshot.child("name").getValue().toString();
-                String status = dataSnapshot.child("status").getKey().toString();
+                String status = dataSnapshot.child("status").getValue().toString();
                 String image = dataSnapshot.child("image").getValue().toString();
 
                 mProfileName.setText(name);
@@ -132,6 +131,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
                                @Override
                                public void onCancelled(DatabaseError databaseError) {
+                                   mProgress.dismiss();
 
                                }
                            });
@@ -142,7 +142,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+                        mProgress.dismiss();
                     }
                 });
 
@@ -281,6 +281,28 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                         });
                             }
                         });
+            }
+
+            // ------------- FRIENDS STATE ---------------------------
+
+            if(mCurrent_state.equals("friends")) {
+                mFriendDatabase.child(mUserProfileID).child(mCurrentUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        mFriendDatabase.child(mCurrentUser.getUid()).child(mUserProfileID).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+
+                                mProfileSendReqBtn.setEnabled(true);
+                                mCurrent_state = "not_friends";
+                                mProfileSendReqBtn.setText("Send Friend Request");
+
+                                mProfileDeclineBtn.setVisibility(View.INVISIBLE);
+                                mProfileDeclineBtn.setEnabled(false);
+                            }
+                        });
+                    }
+                });
             }
 
         }
