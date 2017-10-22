@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
 
@@ -99,7 +100,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                 mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
 
+                String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
                 HashMap<String, String> userMap = new HashMap<>();
+                userMap.put("device_token", deviceToken);
                 userMap.put("name", display_name);
                 userMap.put("status", "Status to be determined.");
                 userMap.put("image", "default");
