@@ -18,6 +18,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name=".ClassicalChat">
+
+        <service
+            android:name=".services.FirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,7 +56,12 @@
         <activity android:name=".ui.MeetupListActivity" />
         <activity android:name=".ui.MeetupDetailActivity" />
         <activity android:name=".ui.SavedMeetupListActivity" />
-        <activity android:name=".ui.ProfileActivity"></activity>
+        <activity android:name=".ui.ProfileActivity">
+            <intent-filter>
+                <action android:name="com.epicodus.classicalchat_TARGET_NOTIFICATION"></action>
+                <category android:name="android.intent.category.DEFAULT"></category>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
