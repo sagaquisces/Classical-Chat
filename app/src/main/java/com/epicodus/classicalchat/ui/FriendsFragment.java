@@ -1,7 +1,9 @@
 package com.epicodus.classicalchat.ui;
 
 
+import android.content.Context;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,8 +16,14 @@ import com.epicodus.classicalchat.R;
 import com.epicodus.classicalchat.models.Friends;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -26,6 +34,8 @@ public class FriendsFragment extends Fragment {
     private RecyclerView mFriendsList;
 
     private DatabaseReference mFriendsDatabase;
+    private DatabaseReference mUsersDatabase;
+
     private FirebaseAuth mAuth;
 
     private String mCurrentUserID;
@@ -50,6 +60,9 @@ public class FriendsFragment extends Fragment {
         mCurrentUserID = mAuth.getCurrentUser().getUid();
 
         mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(mCurrentUserID);
+        mFriendsDatabase.keepSynced(true);
+        mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
+        mUsersDatabase.keepSynced(true);
 
         mFriendsList.setHasFixedSize(true);
         mFriendsList.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -70,8 +83,26 @@ public class FriendsFragment extends Fragment {
 
         ) {
             @Override
-            protected void populateViewHolder(FriendsViewHolder viewHolder, Friends friends, int position) {
+            protected void populateViewHolder(final FriendsViewHolder viewHolder, Friends friends, int position) {
                 viewHolder.setDate(friends.getDate());
+
+                String list_user_id = getRef(position).getKey();
+
+                mUsersDatabase.child(list_user_id).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String userName = dataSnapshot.child("name").getValue().toString();
+                        String userThumb = dataSnapshot.child("thumb_image").getValue().toString();
+
+                        viewHolder.setName(userName);
+                        viewHolder.setUserImage(userThumb, getContext());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         };
 
@@ -92,6 +123,17 @@ public class FriendsFragment extends Fragment {
 
             TextView userNameView = (TextView) mView.findViewById(R.id.user_single_status);
             userNameView.setText(date);
+        }
+
+        public void setName(String name) {
+            TextView userNameView = (TextView) mView.findViewById(R.id.user_single_name);
+            userNameView.setText(name);
+        }
+
+        public void setUserImage (String thumb_image, Context ctx) {
+            CircleImageView userImageView = (CircleImageView) mView.findViewById(R.id.user_single_image);
+
+            Picasso.with(ctx).load(thumb_image).placeholder(R.drawable.hermione_granger).into(userImageView);
         }
     }
 }
