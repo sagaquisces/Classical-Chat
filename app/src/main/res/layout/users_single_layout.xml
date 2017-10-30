@@ -38,5 +38,16 @@
         app:layout_constraintLeft_toRightOf="@+id/user_single_image"
         app:layout_constraintTop_toBottomOf="@+id/user_single_name" />
 
+    <ImageView
+        android:id="@+id/user_single_online_icon"
+        android:layout_width="24dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:visibility="invisible"
+        app:layout_constraintLeft_toRightOf="@+id/user_single_name"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/on_button" />
+
 
 </android.support.constraint.ConstraintLayout>

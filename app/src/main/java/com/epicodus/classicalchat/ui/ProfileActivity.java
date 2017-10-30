@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -40,6 +42,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Bind(R.id.profile_send_req_btn) Button mProfileSendReqBtn;
     @Bind(R.id.profile_decline_btn) Button mProfileDeclineBtn;
 
+    private FirebaseAuth mAuth;
     private DatabaseReference mUsersDatabase;
 
     private ProgressDialog mProgress;
@@ -175,6 +178,25 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        mRootRef.child("Users").child(mCurrentUser.getUid()).child("online").setValue("true");
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        mRootRef.child("Users").child(mCurrentUser.getUid()).child("online").setValue(ServerValue.TIMESTAMP);
+
+    }
+
 
     @Override
     public void onClick(View view) {

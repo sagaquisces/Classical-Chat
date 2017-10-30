@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.epicodus.classicalchat.R;
@@ -86,16 +87,22 @@ public class FriendsFragment extends Fragment {
             protected void populateViewHolder(final FriendsViewHolder viewHolder, Friends friends, int position) {
                 viewHolder.setDate(friends.getDate());
 
-                String list_user_id = getRef(position).getKey();
+                final String list_user_id = getRef(position).getKey();
 
                 mUsersDatabase.child(list_user_id).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        String userName = dataSnapshot.child("name").getValue().toString();
+                        final String userName = dataSnapshot.child("name").getValue().toString();
                         String userThumb = dataSnapshot.child("thumb_image").getValue().toString();
+                        if(dataSnapshot.hasChild("online")) {
 
+                            String userOnline = dataSnapshot.child("online").getValue().toString();
+                            viewHolder.setUserOnline(userOnline);
+
+                        }
                         viewHolder.setName(userName);
                         viewHolder.setUserImage(userThumb, getContext());
+
                     }
 
                     @Override
@@ -134,6 +141,16 @@ public class FriendsFragment extends Fragment {
             CircleImageView userImageView = (CircleImageView) mView.findViewById(R.id.user_single_image);
 
             Picasso.with(ctx).load(thumb_image).placeholder(R.drawable.hermione_granger).into(userImageView);
+        }
+
+        public void setUserOnline (String online_status) {
+            ImageView userOnlineView = (ImageView) mView.findViewById(R.id.user_single_online_icon);
+
+            if (online_status.equals("true")) {
+                userOnlineView.setVisibility(View.VISIBLE);
+            } else {
+                userOnlineView.setVisibility(View.INVISIBLE);
+            }
         }
     }
 }
