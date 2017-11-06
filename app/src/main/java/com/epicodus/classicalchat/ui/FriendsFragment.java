@@ -130,6 +130,7 @@ public class FriendsFragment extends Fragment {
 
                                             Intent dialogIntent = new Intent(getContext(), DialogActivity.class);
                                             dialogIntent.putExtra("user_id", list_user_id);
+                                            dialogIntent.putExtra("user_name", userName);
                                             startActivity(dialogIntent);
                                         }
                                     }

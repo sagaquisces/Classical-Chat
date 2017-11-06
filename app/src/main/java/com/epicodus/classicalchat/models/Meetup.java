@@ -16,7 +16,7 @@ public class Meetup {
     String location; //localized_location, may be in suburb city
     String organizer; //organizer
     String imageUrl; //group_photo --> photo_link
-    private String pushId;
+    String pushId;
     String index;
 
     public Meetup() {}
