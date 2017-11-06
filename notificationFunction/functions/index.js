@@ -51,13 +51,6 @@ exports.sendNotification = functions.database
 
     });
 
-  	
-
-  			
-
-
-
-
 
   });
 

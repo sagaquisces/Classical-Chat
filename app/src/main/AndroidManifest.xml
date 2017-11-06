@@ -11,16 +11,14 @@
         android:required="false" />
 
     <application
+        android:name=".ClassicalChat"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".ClassicalChat">
-
-        <service
-            android:name=".services.FirebaseMessagingService">
+        android:theme="@style/AppTheme">
+        <service android:name=".services.FirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -58,9 +56,13 @@
         <activity android:name=".ui.SavedMeetupListActivity" />
         <activity android:name=".ui.ProfileActivity">
             <intent-filter>
-                <action android:name="com.epicodus.classicalchat_TARGET_NOTIFICATION"></action>
-                <category android:name="android.intent.category.DEFAULT"></category>
+                <action android:name="com.epicodus.classicalchat_TARGET_NOTIFICATION" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+        </activity>
+        <activity android:name=".ui.DialogActivity"
+            android:parentActivityName=".ui.ChatActivity">
         </activity>
     </application>
 
