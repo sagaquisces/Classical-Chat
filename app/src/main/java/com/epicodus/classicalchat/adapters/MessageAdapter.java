@@ -46,22 +46,32 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     @Override
     public void onBindViewHolder(final MessageViewHolder holder, int i) {
 
-        mAuth = FirebaseAuth.getInstance();
-        String current_user_id = mAuth.getCurrentUser().getUid();
-
         Messages c = mMessageList.get(i);
 
         String from_user = c.getFrom();
 
-        if(from_user.equals(current_user_id)) {
-            holder.mMessageText.setBackgroundColor(Color.WHITE);
-            holder.mMessageText.setTextColor(Color.BLACK);
-        } else {
-            holder.mMessageText.setBackgroundResource(R.drawable.message_text_background);
-            holder.mMessageText.setTextColor(Color.WHITE);
-        }
+        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(from_user);
 
-        holder.mMessageText.setText(c.getMessage());
+        mUserDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                String name = dataSnapshot.child("name").getValue().toString();
+                String image = dataSnapshot.child("thumb_image").getValue().toString();
+
+                holder.displayName.setText(name);
+
+                Picasso.with(holder.profileImage.getContext()).load(image)
+                        .placeholder(R.drawable.hermione_granger).into(holder.profileImage);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        holder.messageText.setText(c.getMessage());
     }
 
     @Override
@@ -71,16 +81,16 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     public class MessageViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView mMessageText;
-        public CircleImageView mProfileImage;
-        public TextView mDisplayName;
+        public TextView messageText;
+        public CircleImageView profileImage;
+        public TextView displayName;
 
         public MessageViewHolder(View itemView) {
             super(itemView);
 
-            mMessageText = (TextView) itemView.findViewById(R.id.message_text_layout);
-            mProfileImage = (CircleImageView) itemView.findViewById(R.id.message_profile_image_layout);
-            mDisplayName = (TextView) itemView.findViewById(R.id.name_text_layout);
+            messageText = (TextView) itemView.findViewById(R.id.message_text_layout);
+            profileImage = (CircleImageView) itemView.findViewById(R.id.message_profile_image_layout);
+            displayName = (TextView) itemView.findViewById(R.id.name_text_layout);
         }
     }
 
