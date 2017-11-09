@@ -1,9 +1,13 @@
 package com.epicodus.classicalchat.ui;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.annotation.Nullable;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,12 +76,15 @@ public class MeetupDetailFragment extends Fragment implements View.OnClickListen
         View view = inflater.inflate(R.layout.fragment_meetup_detail, container, false);
         ButterKnife.bind(this, view);
 
+        String tempText = mMeetup.getDescription();
+        Spanned result = Html.fromHtml(tempText);
+
         Picasso.with(view.getContext()).load(mMeetup.getImageUrl()).into(mImageLabel);
 
         mNameLabel.setText(mMeetup.getName());
         mScoreLabel.setText(Double.toString(mMeetup.getScore()));
         mLocationLabel.setText(mMeetup.getLocation());
-        mDescriptionLabel.setText(mMeetup.getDescription());
+        mDescriptionLabel.setText(result);
 
         mWebsiteLabel.setOnClickListener(this);
 
@@ -93,7 +100,9 @@ public class MeetupDetailFragment extends Fragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         if (v == mWebsiteLabel) {
-            Toast.makeText(getContext(), "Will eventually go to website", Toast.LENGTH_SHORT);
+            Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse(mMeetup.getLink()));
+            startActivity(webIntent);
         }
 
         if (v == mSaveBtn) {
