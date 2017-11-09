@@ -66,22 +66,24 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 String name = dataSnapshot.child("name").getValue().toString();
                 String image = dataSnapshot.child("thumb_image").getValue().toString();
                 String from_user = dataSnapshot.getKey();
-                Log.v("HERE'S THE FROM USER", from_user);
-                Log.v("HERE'S THE CURRENT USER", mCurrentUserId);
 
                 RelativeLayout.LayoutParams paramsMsg = (RelativeLayout.LayoutParams) holder.messageText.getLayoutParams();
                 RelativeLayout.LayoutParams paramsName = (RelativeLayout.LayoutParams) holder.displayName.getLayoutParams();
 
                 if(from_user.equals(mCurrentUserId)) {
                     holder.profileImage.setVisibility(View.GONE);
+                    holder.messageText.setBackgroundResource(R.drawable.message_text_background);
                     paramsMsg.addRule(RelativeLayout.ALIGN_PARENT_END,1);
                     paramsMsg.addRule(RelativeLayout.ALIGN_PARENT_START,0);
+
                     paramsName.addRule(RelativeLayout.ALIGN_PARENT_END,1);
                     paramsName.addRule(RelativeLayout.ALIGN_PARENT_START,0);
+
 
                     holder.messageText.setLayoutParams(paramsMsg);
                 } else {
                     holder.profileImage.setVisibility(View.VISIBLE);
+                    holder.messageText.setBackgroundResource(R.drawable.message_text_backgroundb);
                     paramsMsg.addRule(RelativeLayout.ALIGN_PARENT_END,0);
                     paramsMsg.addRule(RelativeLayout.ALIGN_PARENT_START,1);
                     paramsName.addRule(RelativeLayout.ALIGN_PARENT_END,0);
