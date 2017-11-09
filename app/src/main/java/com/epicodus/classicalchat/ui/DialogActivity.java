@@ -1,6 +1,7 @@
 package com.epicodus.classicalchat.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -30,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -68,6 +70,10 @@ public class DialogActivity extends AppCompatActivity {
 
     private static final int TOTAL_ITEMS_TO_LOAD = 10;
     private int mCurrentPage= 1;
+
+    private static final int GALLERY_PIC = 1;
+
+    private StorageReference mImageStorage;
 
     private int itemPosition = 0;
     private String mLastKey = "";
@@ -187,6 +193,17 @@ public class DialogActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 sendMessage();
+            }
+        });
+
+        mDialogAddBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent galleryIntent = new Intent();
+                galleryIntent.setType("image/*");
+                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+                startActivityForResult(Intent.createChooser(galleryIntent, "SELECT IMAGE"), GALLERY_PIC);
             }
         });
 

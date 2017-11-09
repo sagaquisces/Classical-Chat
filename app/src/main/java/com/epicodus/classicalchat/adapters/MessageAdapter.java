@@ -2,9 +2,12 @@ package com.epicodus.classicalchat.adapters;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.epicodus.classicalchat.R;
@@ -30,6 +33,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     private List<Messages> mMessageList;
     private DatabaseReference mUserDatabase;
     private FirebaseAuth mAuth;
+    private String mCurrentUserId;
 
     public MessageAdapter(List<Messages> mMessageList) {
         this.mMessageList = mMessageList;
@@ -50,6 +54,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         String from_user = c.getFrom();
 
+        mAuth = FirebaseAuth.getInstance();
+        mCurrentUserId = mAuth.getCurrentUser().getUid();
+
         mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(from_user);
 
         mUserDatabase.addValueEventListener(new ValueEventListener() {
@@ -58,11 +65,39 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
                 String name = dataSnapshot.child("name").getValue().toString();
                 String image = dataSnapshot.child("thumb_image").getValue().toString();
+                String from_user = dataSnapshot.getKey();
+                Log.v("HERE'S THE FROM USER", from_user);
+                Log.v("HERE'S THE CURRENT USER", mCurrentUserId);
+
+                RelativeLayout.LayoutParams paramsMsg = (RelativeLayout.LayoutParams) holder.messageText.getLayoutParams();
+                RelativeLayout.LayoutParams paramsName = (RelativeLayout.LayoutParams) holder.displayName.getLayoutParams();
+
+                if(from_user.equals(mCurrentUserId)) {
+                    holder.profileImage.setVisibility(View.GONE);
+                    paramsMsg.addRule(RelativeLayout.ALIGN_PARENT_END,1);
+                    paramsMsg.addRule(RelativeLayout.ALIGN_PARENT_START,0);
+                    paramsName.addRule(RelativeLayout.ALIGN_PARENT_END,1);
+                    paramsName.addRule(RelativeLayout.ALIGN_PARENT_START,0);
+
+                    holder.messageText.setLayoutParams(paramsMsg);
+                } else {
+                    holder.profileImage.setVisibility(View.VISIBLE);
+                    paramsMsg.addRule(RelativeLayout.ALIGN_PARENT_END,0);
+                    paramsMsg.addRule(RelativeLayout.ALIGN_PARENT_START,1);
+                    paramsName.addRule(RelativeLayout.ALIGN_PARENT_END,0);
+                    paramsName.addRule(RelativeLayout.ALIGN_PARENT_START,1);
+
+                    holder.messageText.setLayoutParams(paramsMsg);
+                    Picasso.with(holder.profileImage.getContext()).load(image)
+                            .placeholder(R.drawable.hermione_granger).into(holder.profileImage);
+                }
 
                 holder.displayName.setText(name);
-
                 Picasso.with(holder.profileImage.getContext()).load(image)
-                        .placeholder(R.drawable.hermione_granger).into(holder.profileImage);
+                            .placeholder(R.drawable.hermione_granger).into(holder.profileImage);
+
+
+
             }
 
             @Override
@@ -70,6 +105,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
             }
         });
+
+        if(mCurrentUserId.equals(from_user)) {
+            holder.displayName.setText("me");
+        }
 
         holder.messageText.setText(c.getMessage());
     }
