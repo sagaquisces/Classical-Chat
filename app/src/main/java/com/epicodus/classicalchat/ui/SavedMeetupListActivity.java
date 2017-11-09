@@ -1,11 +1,15 @@
 package com.epicodus.classicalchat.ui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.epicodus.classicalchat.Constants;
 import com.epicodus.classicalchat.R;
@@ -24,12 +28,13 @@ import com.google.firebase.database.Query;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class SavedMeetupListActivity extends AppCompatActivity implements OnStartDragListener {
+public class SavedMeetupListActivity extends AppCompatActivity implements OnStartDragListener, View.OnClickListener {
     private DatabaseReference mMeetupReference;
     private FirebaseMeetupListAdapter mFirebaseAdapter;
     private ItemTouchHelper mItemTouchHelper;
 
     @Bind(R.id.recyclerView) RecyclerView mRecyclerView;
+    @Bind(R.id.meetupsBtn) Button mMeetupsBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +44,8 @@ public class SavedMeetupListActivity extends AppCompatActivity implements OnStar
         ButterKnife.bind(this);
 
         setUpFirebaseAdapter();
+
+        mMeetupsBtn.setOnClickListener(this);
 
     }
 
@@ -73,5 +80,15 @@ public class SavedMeetupListActivity extends AppCompatActivity implements OnStar
     protected void onDestroy() {
         super.onDestroy();
         mFirebaseAdapter.cleanup();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view == mMeetupsBtn) {
+
+            Intent meetups_intent = new Intent(SavedMeetupListActivity.this, MeetupListActivity.class);
+            startActivity(meetups_intent);
+
+        }
     }
 }
